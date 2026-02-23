@@ -1,0 +1,53 @@
+# Cephalon Slowbot Desktop: Structure
+
+This document serves as the architectural map for the **Cephalon Slowbot Desktop** project.
+
+---
+
+## Project Overview
+**Cephalon Slowbot Desktop** is a Linux-native companion application for Warframe, built as a non-intrusive alternative to AlecaFrame. It features a dual-interface design: a transparent overlay for in-game relic reward selection recommendations and riven grading, alongside a standalone desktop dashboard for comprehensive inventory tracking and Mastery Rank progression.
+
+---
+
+## Tech Stack
+* **Frontend:** JavaScript, HTML, CSS.
+* **Backend:** Rust.
+* **Framework:** Tauri (handles window creation, OS-level integration, and the Rust/JS bridge).
+* **Target OS:** Linux 
+
+---
+
+## Required Dependencies
+
+### Rust (Cargo.toml)
+* `tauri`: Core framework.
+* `reqwest`: For asynchronous HTTP requests to the `warframe.market` API.
+* `serde` & `serde_json`: For serializing and deserializing JSON payloads.
+* `notify`: To monitor and parse Warframe's `EE.log` file for session state changes without reading RAM.
+* `directories`: To reliably locate OS-level configuration and data paths across different Linux setups.
+
+### JavaScript (package.json)
+Vite, paired with vanilla JS (this might switch to Svelte or Preact depending on how messy things get) to ensure the UI remains snappy and consumes minimal resources. 
+
+---
+
+## UX & Configuration Strategy
+To maintain a comfortable UX without aggressive system hooks, the app relies on a user-editable `config.json` file managed by the Rust backend. 
+* **User Customization:** This file will store preferences like custom paths to the Warframe Proton prefix (vital for `EE.log` tracking), preferred API regions, and UI themes.
+* **The "No RAM" Reality:** Because we are avoiding memory reading, Mastery Rank tracking and deep inventory counts in the desktop UI will require a mix of manual user syncing (e.g., clicking a "Sync Inventory" button when viewing the in-game profile) and persistent local storage updating whenever new items are detected via log events.
+
+---
+
+## Code Map (Directory Structure)
+
+### 1. Core Engine (`/src-tauri/src/`)
+* **`main.rs` (Entry Point):** Initializes the Tauri application, mounts the system tray, and spawns the overlay and dashboard windows.
+* **`log_watcher.rs` (State Poller):** Hooks into Warframe's `EE.log` file to detect mission starts, relic selection screens, and riven mod observation, to send to the frontend.
+* **`market.rs` (API Client):** Handles all outward bound requests to `warframe.market` to fetch platinum values and riven pricing data.
+* **`inventory.rs` (Data Manager):** Manages the local SQLite or JSON database tracking the user's prime parts, calculated Mastery Rank progress, and missing equipment.
+
+### 2. The JS Interface (`/src/`)
+* **`main.js` (Frontend Routing):** Determines if the current Tauri window should load the Overlay UI or the Dashboard UI.
+* **`overlay.js` (In-Game HUD):** Handles the logic for the transparent, always-on-top window, rendering relic reward screen ducat/plat values and current inventory stacks and riven deviation metrics when triggered by the backend.
+* **`dashboard.js` (Desktop App):** Controls the non-overlay UI. This handles rendering the visual charts for current inventory counts, completed mastery items, and "what to farm next" checklists.
+* **`formatter.js` (Utilities):** Reusable functions for standardizing data presentation and parsing backend payloads.
