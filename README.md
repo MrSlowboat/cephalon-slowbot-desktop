@@ -20,7 +20,7 @@ The essential problem that any warframe companion app for linux faces is that I 
 
 ## Community Contributions
 
-So, because we all have to live with the reality that there's no way to match the usefulness of AlecaFrame without using something incredibly intrusive and resource heavy, I hope that the broader warframe community on both Linux and Windows can group together and brainstorm features that prevent this bot from being something that isn't a fundamentally worse AlecaFrame clone. To that end, if you'd like to contribute to the development of Cephalon Slowbot, please do feel free to join my discord in any capacity you like; be it development, testing, ideating or even just observing. You can find me here:
+So, because we all have to live with the reality that there's no way to match the usefulness of AlecaFrame without using something incredibly intrusive and resource heavy, I hope that the warframe community on Linux and Windows can come together and brainstorm features that prevent this bot from being something that isn't a fundamentally worse AlecaFrame clone. To that end, if you'd like to contribute to the development of Cephalon Slowbot, please do feel free to join my discord in any capacity you like; be it development, testing, ideating or even just observing. You can find me here:
 <br><br><a href="https://discord.gg/yctkNhnbeH">
     <img title="" src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d74e9607e61eeec9c91b_Logo.svg" alt="Discord">
 </a><br>
